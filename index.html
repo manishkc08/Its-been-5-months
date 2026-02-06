@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snehal ❤️ Manish</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fff0f3;
+            --accent-pink: #ff8fa3;
+            --accent-gold: #c59d5f;
+            --text-heading: #590d22;
+            --text-body: #4a4a4a;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 20px 60px rgba(89, 13, 34, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffe3e3 1px, transparent 1px);
+            background-size: 30px 30px;
+            font-family: 'Lato', sans-serif;
+            color: var(--text-body);
+            overflow-x: hidden;
+            line-height: 1.8;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23ff8fa3"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+        }
+
+        /* ====================
+           LOGIN CURTAIN EFFECT
+           ==================== */
+        #login-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10000;
+            display: flex;
+            transition: all 1.5s ease-in-out;
+        }
+
+        .curtain-left, .curtain-right {
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffc2d1 100%);
+            position: absolute;
+            top: 0;
+            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 1;
+        }
+        
+        .curtain-left { left: 0; border-right: 1px solid white; }
+        .curtain-right { right: 0; border-left: 1px solid white; }
+
+        .login-content {
+            z-index: 10;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        /* Animation when unlocked */
+        #login-overlay.unlocked .curtain-left { transform: translateX(-100%); }
+        #login-overlay.unlocked .curtain-right { transform: translateX(100%); }
+        #login-overlay.unlocked .login-content { opacity: 0; transform: translate(-50%, -150%) scale(0.8); transition: 0.8s; }
+        #login-overlay.unlocked { pointer-events: none; }
+
+        .login-title { font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: var(--text-heading); margin-bottom: 5px; }
+        
+        .input-field {
+            width: 100%; padding: 12px 15px; margin: 10px 0;
+            border: 1px solid #ffccd5; border-radius: 10px;
+            font-family: 'Lato', sans-serif; outline: none; background: #fff9fa;
+        }
+        
+        .unlock-btn {
+            background: var(--text-heading); color: white; border: none;
+            padding: 12px 30px; border-radius: 50px; font-size: 1.1rem;
+            cursor: pointer; margin-top: 10px; width: 100%;
+            transition: 0.3s;
+        }
+        .unlock-btn:hover { background: var(--accent-gold); transform: scale(1.05); }
+
+        /* ====================
+           MAIN CONTENT
+           ==================== */
+        #main-content { opacity: 0; transition: opacity 2s ease 1s; }
+        .visible-content { opacity: 1 !important; }
+
+        .container { max-width: 650px; margin: 0 auto; padding: 0 25px 120px 25px; }
+
+        h1 { font-family: 'Great Vibes', cursive; font-size: 4rem; color: var(--text-heading); text-align: center; margin-bottom: 5px; animation: popIn 1.5s ease; }
+        
+        .typewriter {
+            font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: 1.1rem; color: #888; text-align: center;
+            overflow: hidden; white-space: nowrap; margin: 0 auto;
+            border-right: 2px solid #ff8fa3;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+            max-width: fit-content;
+        }
+
+        /* Cards with 3D Effect */
+        .memory-card {
+            background: var(--card-bg); border-radius: 20px; padding: 30px;
+            margin-bottom: 50px; box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,1);
+            position: relative;
+            opacity: 0; transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        .memory-card.visible { opacity: 1; transform: translateY(0); }
+        .memory-card:hover { transform: translateY(-5px); box-shadow: 0 25px 70px rgba(89,13,34,0.15); }
+
+        .photo-frame {
+            width: 100%; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 25px;
+            border: 8px solid white;
+        }
+        .photo-frame img { width: 100%; display: block; transition: transform 1.5s ease; }
+        .photo-frame:hover img { transform: scale(1.1); }
+
+        .date-badge {
+            background: rgba(89, 13, 34, 0.08); color: var(--text-heading);
+            padding: 5px 15px; border-radius: 50px; font-size: 0.8rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 15px; display: inline-block;
+        }
+        
+        .highlight { background: linear-gradient(120deg, #ffe3e3 0%, #ffccd5 100%); padding: 0 5px; font-weight: 600; color: #590d22; }
+
+        /* Animations */
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #ff8fa3; } }
+        @keyframes floatHeart { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
+
+        /* Sparkle Element */
+        .sparkle { position: fixed; width: 10px; height: 10px; background: gold; border-radius: 50%; pointer-events: none; animation: sparkleAnim 1s linear forwards; z-index: 9999; }
+        @keyframes sparkleAnim { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
+
+        /* Hero Layout */
+        #hero { min-height: 95vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+        <div class="curtain-left"></div>
+        <div class="curtain-right"></div>
+        <div class="login-content">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+            <h2 class="login-title">Snehal & Manish</h2>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Enter our special date to begin.</p>
+            
+            <input type="text" id="username" class="input-field" placeholder="Who is my queen?">
+            <input type="password" id="password" class="input-field" placeholder="When did our story begin? (DDMMYYYY)">
+            
+            <button class="unlock-btn" onclick="attemptLogin()">Unlock My Heart ❤️</button>
+            <p id="error-msg" style="color: #d63384; font-size: 0.85rem; margin-top: 10px; font-weight: bold;"></p>
+        </div>
+    </div>
+
+    <div id="main-content">
+        
+        <audio id="bg-music" loop>
+            <source src="music.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="container">
+            <section id="hero">
+                <div class="photo-frame" style="max-width: 280px; transform: rotate(-3deg) translateY(20px);">
+                    <img src="https://i.ibb.co/MLGqpS5/Snapchat-1725874983.jpg" alt="Cover">
+                </div>
+                
+                <h1 style="margin-top: 30px;">Snehal & Manish</h1>
+                <div class="typewriter">"Every picture tells a story of us."</div>
+
+                <div style="margin-top: 30px; width: 100%; border-radius: 15px; overflow: hidden; box-shadow: 0 15px 40px rgba(89,13,34,0.15); transform: scale(0.95);">
+                    <iframe src="https://audio.com/embed/audio/1831023770404705?theme=image" style="display:block; width: 100%; height: 160px; border: none;" title="Our Song"></iframe>
+                </div>
+                
+                <div style="font-size: 2.5rem; color: #ff8fa3; margin-top: 30px; animation: popIn 2s infinite alternate;">❤</div>
+            </section>
+
+            <div style="text-align: center; margin: 80px 0;"><h3 style="font-family: 'Great Vibes'; font-size: 2.5rem; color: var(--accent-gold);">The Beginning</h3></div>
+
+            <div class="memory-card">
+                <span class="date-badge">14 September 2025</span>
+                <div class="photo-frame"><img src="https://i.ibb.co/m5bp0YwJ/IMG-20250914-231703-924.jpg"></div>
+                <h2>Our First Date</h2>
+                <p class="story">Our very first date on 14 September 2025, where I took you to watch the <span class="highlight">Demon Slayer</span> movie together; we had a lot of fun and it didn't even feel like we were meeting for the first time.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/xSpGwGCs/Snapchat-41858273.jpg"></div>
+                <h2>First Selfie & Tacos</h2>
+                <p class="story">Our very first selfie together, taken on that same day we shared our first meal together, which was tacos.</p>
+            </div>
+
+            <div class="memory-card">
+                <span class="date-badge">29 September 2025</span>
+                <div class="photo-frame"><img src="https://i.ibb.co/CpRJSwpJ/IMG-20250928-WA0023.jpg"></div>
+                <h2>Garba Night</h2>
+                <p class="story">From 29 September 2025 on Garba night for Navratri at Symbiosis; even though it was all mud and raining, we enjoyed it so much and some strangers took this really good picture of us.</p>
+            </div>
+
+            <div class="memory-card">
+                <span class="date-badge">27 September 2025</span>
+                <div class="photo-frame"><img src="https://i.ibb.co/WNYJgmbr/IMG-20250930-WA0009.jpg"></div>
+                <h2>The Sunflower & First Kiss</h2>
+                <p class="story">From 27 September 2025 at Eastcourt Phoenix, the day I gave you a sunflower and we had our <span class="highlight">first kiss</span>. I was feeling down that day, and we went to Eastcourt. It was an empty room, and we just looked at each other. An auntie stopped us to say we looked so cute and she gave me a rose bouquet to give to you, making that moment feel so good and real.</p>
+            </div>
+
+            <div class="memory-card">
+                <span class="date-badge">1 October 2025</span>
+                <div class="photo-frame"><img src="https://i.ibb.co/6R9L34Zy/IMG-20251002-015412.jpg"></div>
+                <h2>The Bucket List</h2>
+                <p class="story">On 1 October 2025, when I sat down with you to make our "Bucket List" of things to do and I drew a little turtle just because you asked me to.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/Pzgb6Kjf/vvkrjpqK/Snapchat-746018981.jpg"></div>
+                <h2>Zen Cafe Date</h2>
+                <p class="story">From a date at Zen Cafe in Kalyani Nagar where we couldn't find any other cafe; it was full of older people and the coffee and mojitos were terrible, but we always laugh at it whenever we remember.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/20RtChNg/RGt0sbyz/IMG-20251003-WA0004.jpg"></div>
+                <h2>The Notebook</h2>
+                <p class="story">When I watched <em>The Notebook</em> with you; we started the movie at 11 PM and I stayed up talking with you until 7 AM the next morning because it is one of our absolute favorite movies.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/VcdL8pyx/39wTHYXv/IMG-20251004-WA0048.jpg"></div>
+                <h2>A Gift for You</h2>
+                <p class="story">The collage of images I made and gifted to you along with a bunch of flowers.</p>
+            </div>
+
+            <div class="memory-card">
+                <span class="date-badge">4 October 2025</span>
+                <div class="photo-frame"><img src="https://i.ibb.co/4gFXKyxc/JFcGmLPN/IMG-20251004-WA0053.jpg"></div>
+                <h2>Aeromall DIY</h2>
+                <p class="story">From 4 October 2025 when I went to Aeromall DIY with you and we took pictures; it was such a memorable day because you spent the whole time trying all different types of hairbands on me.</p>
+            </div>
+
+            <div class="memory-card">
+                <span class="date-badge">Diwali</span>
+                <div class="photo-frame"><img src="https://i.ibb.co/JPyX2tF/MLGqpS5/Snapchat-1725874983.jpg"></div>
+                <h2>Diwali Fireworks</h2>
+                <p class="story">Around Diwali when I went to a garden in Pimpri with you; I know I was 40 minutes late and you were mad at me, but the garden was pretty and we saw the fireworks together.</p>
+            </div>
+
+
+            <div style="text-align: center; margin: 80px 0;"><h3 style="font-family: 'Great Vibes'; font-size: 2.5rem; color: var(--accent-gold);">Deepening Our Bond</h3></div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/GfmCYBWc/IMG-20251019-WA0000.jpg"></div>
+                <h2>The Bagel Date</h2>
+                <p class="story">A mirror selfie at a pretty cafe in Viman Nagar where I shared a very large pizza and a bagel with you; neither of us had eaten a bagel before so it was our first experience and it had a lot of mayo.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/2YMyxbyv/Screenshot-2025-10-21-20-07-14-502-com-instagram-android.jpg"></div>
+                <h2>Photobooth Chaos</h2>
+                <p class="story">Our first photobooth trip where all the photos came out terrible because we only had 6 seconds to react and couldn't do poses properly, but we still got one good image out of it.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/LdLqf54m/IMG-20251025-WA0023.jpg"></div>
+                <h2>White Jacket</h2>
+                <p class="story">When I gave you my white jacket to wear on a walk in KLN; it looked so good on you and your mehendi had come out very dark and beautiful that day.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/SX9kthm5/Snapchat-1455074039.jpg"></div>
+                <h2>Mortal Kombat</h2>
+                <p class="story">The aftermath of us eating at Nothing Before Cafe. We were at Game Dome playing <span class="highlight">Mortal Kombat</span>. You were very confident you would beat me, but you lost terribly! It was so fun.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/BK69tvzs/Snapchat-2086523455.jpg"></div>
+                <h2>Bittersweet</h2>
+                <p class="story">A pretty selfie, but I remember feeling very emotional and sad that day because I was leaving for my college the next morning and I didn't want to go.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/hFNt5xDf/Snapchat-1283884521.jpg"></div>
+                <h2>Recreating the Kiss</h2>
+                <p class="story">When I finally recreated the elevator mirror-kiss photo with you on a day we walked together and talked a lot about many things.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/SDLmLZQm/IMG-20251121-WA0014.jpg"></div>
+                <h2>Caring for You</h2>
+                <p class="story">At NIC Ice Creams when you had period cramps and were leaving Pune; even though you weren't feeling well, you still came to see me and I fed you ice cream with my own hands.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/0pnvKmGt/IMG-20251106-WA0044.jpg"></div>
+                <h2>Amanora Chase</h2>
+                <p class="story">Us meeting at Amanora after 15 days apart where we had KFC; I remember you running around and me trying to catch you while you were trying on clothes in the New ME store.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/6cD8zT66/IMG-20251125-WA0024.jpg"></div>
+                <h2>Lumi</h2>
+                <p class="story">At Aeromall when I got our toy penguin, Lumi, the day before I went back to college; I took Lumi with me because she is a "mini Snehal".</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/2YfRKX0t/Snapchat-420600259.jpg"></div>
+                <h2>The Prank</h2>
+                <p class="story">At Joggers Park after a night at Fudge and Flow where you had gone home and then came back because you missed me; I pranked you by saying I'd already eaten two plates of momos and panipuri without you, and you got so mad.</p>
+            </div>
+
+
+            <div style="text-align: center; margin: 80px 0;"><h3 style="font-family: 'Great Vibes'; font-size: 2.5rem; color: var(--accent-gold);">Our Recent Stories</h3></div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/fbKzF1V/IMG-20260107-WA0030.jpg"></div>
+                <h2>Fudge & Flow</h2>
+                <p class="story">Our first time at Fudge and Flow where you were wearing pink and looked so pretty; we tried the waffle fries and drinks and took many pictures.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/dswpZWM0/IMG-20260107-WA0000.jpg"></div>
+                <h2>Matching</h2>
+                <p class="story">The screenshot of us matching our profile pictures on Instagram.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/0pkpZkQP/IMG-20260106-WA0041.jpg"></div>
+                <h2>Third Wave</h2>
+                <p class="story">At Third Wave Coffee where I finally ordered the mochas correctly; last time I couldn't pronounce it so we had to deal with an iced americano, but this time we both had the mocha and you loved it.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/HTkTdnHY/IMG-20260106-WA0035.jpg"></div>
+                <h2>Candid</h2>
+                <p class="story">A candid of us enjoying those mochas together.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/fzqR4LPP/IMG-20260106-WA0031.jpg"></div>
+                <h2>Mirror Selfie</h2>
+                <p class="story">Another mirror selfie from that same successful coffee date.</p>
+            </div>
+
+            <div class="memory-card">
+                <span class="date-badge">17 December 2025</span>
+                <div class="photo-frame"><img src="https://i.ibb.co/mf3YnGG/IMG-20251218-WA0029.jpg"></div>
+                <h2>Annual Day</h2>
+                <p class="story">On 17 December 2025 when I went to meet you for your school's Annual Day because you wanted me to go with you; it was hard to get entry but afterwards we went to Aeromall for KFC.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/fVfv0Vnz/IMG-20251219-WA0043.jpg"></div>
+                <h2>Avatar 3</h2>
+                <p class="story">When I booked tickets for <span class="highlight">Avatar 3</span> just so I could spend time with you.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/67tN5Txc/IMG-20251219-WA0028.jpg"></div>
+                <h2>The Plot</h2>
+                <p class="story">Us during the movie; I hadn't seen Avatar before so I couldn't understand it, but you explained the plot to me a little bit.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/yn0cZzJN/IMG-20251218-WA0017.jpg"></div>
+                <h2>Forehead Kiss</h2>
+                <p class="story">A cute forehead kiss I gave you at Aeromall after your school event.</p>
+            </div>
+
+            <div class="memory-card">
+                <div class="photo-frame"><img src="https://i.ibb.co/4n3cXVL5/IMG-20251206-WA0067.jpg"></div>
+                <h2>Suicide Lake</h2>
+                <p class="story">At Suicide Lake during our first visit together where we were enjoying the sunset and a stranger asked to take our photo because they thought we looked cute together.</p>
+            </div>
+
+            <div style="height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="font-size: 3rem; color: #ff8fa3;">❤️</div>
+                <h2 style="font-family: 'Great Vibes'; font-size: 3rem; margin: 20px 0;">Always Yours, Manish</h2>
+                
+                <a href="https://wa.me/91XXXXXXXXXX?text=I%20love%20it%20Manish!%20It's%20beautiful%20%E2%9D%A4%EF%B8%8F" 
+                   style="background: #25D366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                   Reply to Me 💬
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // LOGIN LOGIC
+        function attemptLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const error = document.getElementById('error-msg');
+            const overlay = document.getElementById('login-overlay');
+            const main = document.getElementById('main-content');
+            const audio = document.getElementById('bg-music');
+
+            if (user.toLowerCase() === 'snehal' && pass === '10092025') {
+                // Success
+                error.style.color = 'green';
+                error.innerText = "Welcome My Love...";
+                
+                // 1. Play Audio (Try to auto-play)
+                audio.volume = 0.6;
+                audio.play().catch(e => console.log("Browser blocked auto-play"));
+
+                // 2. Open Curtains
+                overlay.classList.add('unlocked');
+
+                // 3. Show Main Content
+                setTimeout(() => {
+                    main.classList.add('visible-content');
+                }, 800);
+
+            } else {
+                // Fail
+                error.innerText = "Incorrect! Hint: Your Name & Our Start Date (DDMMYYYY)";
+                document.querySelector('.login-content').style.animation = "shake 0.4s ease-in-out";
+                setTimeout(() => { document.querySelector('.login-content').style.animation = ""; }, 400);
+            }
+        }
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes shake { 0%, 100% {transform:translate(-50%, -50%)} 25% {transform:translate(-55%, -50%)} 75% {transform:translate(-45%, -50%)} }`;
+        document.head.appendChild(style);
+
+        // SPARKLES ON TOUCH/MOUSE
+        document.addEventListener('mousemove', function(e) { createSparkle(e.pageX, e.pageY); });
+        document.addEventListener('touchmove', function(e) { createSparkle(e.touches[0].pageX, e.touches[0].pageY); });
+
+        function createSparkle(x, y) {
+            if(Math.random() > 0.1) return; // Limit sparkles
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.background = `hsl(${Math.random() * 360}, 100%, 80%)`;
+            document.body.appendChild(sparkle);
+            setTimeout(() => { sparkle.remove(); }, 1000);
+        }
+
+        // SCROLL REVEAL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.memory-card').forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>
